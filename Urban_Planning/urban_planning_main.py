@@ -1,7 +1,21 @@
 #!/usr/bin/env python3
 
 import sys
+import time
 import urban_planner_helpers
+
+max_duration = 10 # 10 seconds
+number_boards = 100
+
+
+# filler functions
+def hillclimb():
+    return
+
+
+def genetics():
+    return
+
 
 if __name__ == '__main__':
 
@@ -14,8 +28,18 @@ if __name__ == '__main__':
 
     (num_industrial, num_commercial, num_residential, board_map) = urban_planner_helpers.read_input_file(pathToFile)
 
-    print(num_industrial)
-    print(num_commercial)
-    print(num_residential)
-    print(board_map)
+    board_size_x = len(board_map)
+    board_size_y = len(board_map[0])
 
+    list_of_hill_climbs = urban_planner_helpers.generate_starting_boards(number_boards, board_size_x, board_size_y)
+
+    start_time = time.time()
+
+    still_computing = True
+
+    while (time.time() - start_time) < max_duration and still_computing:
+        for board in list_of_hill_climbs:
+            hillclimb()
+
+        # do genetic engineering
+        genetics()
