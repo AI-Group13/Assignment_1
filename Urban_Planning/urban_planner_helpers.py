@@ -50,3 +50,8 @@ def generate_starting_boards(number_to_make, x, y):
 
     return list_of_starting_boards
 
+
+# prints the board without the list markers and as separate lines for each row
+def print_board(board):
+    for row in board:
+        print(''.join(row))
