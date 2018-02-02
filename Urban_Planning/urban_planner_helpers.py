@@ -30,16 +30,12 @@ def read_input_file(path_to_input_file):
 def generate_empty_board(x, y):
     board = []
 
-    for x in range(0, x):
-
-        y_vector = []
-
-        for y in range(0, y):
-            y_vector.append(' ')
-
-        board.append(y_vector)
-
-    return board
+    for row in range(y):
+        row_temp = []
+        for col in range(x):
+            row_temp.append(' ')
+        board.append(row_temp)
+        row_temp.clear()
 
 
 def generate_starting_boards(number_to_make, x, y):
