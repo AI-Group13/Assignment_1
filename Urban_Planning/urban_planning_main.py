@@ -1,21 +1,15 @@
 #!/usr/bin/env python3
 
 import sys
-import time
+
+import genetic_algorithm
+import hill_climbing
 import urban_planner_helpers
 
 max_duration = 10 # 10 seconds
-number_boards = 100
+number_organisms = 100
 
-
-# filler functions
-def hillclimb():
-    return
-
-
-def genetics():
-    return
-
+mode = 'genetic'  # TODO choose based on Beck's preferred input method
 
 if __name__ == '__main__':
 
@@ -28,18 +22,33 @@ if __name__ == '__main__':
 
     (num_industrial, num_commercial, num_residential, board_map) = urban_planner_helpers.read_input_file(pathToFile)
 
+    zone_tuple = (num_industrial, num_commercial, num_residential)
+
+    generated_map_heuristics = []  # TODO find and generate maps
+
     board_size_x = len(board_map)
     board_size_y = len(board_map[0])
 
-    list_of_hill_climbs = urban_planner_helpers.generate_starting_boards(number_boards, board_size_x, board_size_y)
+    # empty holders for reported values
+    score = 0
+    timestamp = 0
+    winning_map = board_map
 
-    start_time = time.time()
+    if mode is 'genetic':
 
-    still_computing = True
+        working_boards = urban_planner_helpers.generate_starting_boards(number_organisms, board_size_x, board_size_y)
 
-    while (time.time() - start_time) < max_duration and still_computing:
-        for board in list_of_hill_climbs:
-            hillclimb()
+        score, timestamp, winning_map = genetic_algorithm.genetics(board_map, working_boards, zone_tuple,
+                                                                   generated_map_heuristics)
 
-        # do genetic engineering
-        genetics()
+    elif mode is 'algorithm':
+
+        working_boards = urban_planner_helpers.generate_starting_boards(1, board_size_x, board_size_y)
+
+        score, timestamp, winning_map = hill_climbing.hillclimb(board_map, working_boards, zone_tuple,
+                                                                generated_map_heuristics)
+
+    print('The winning score was: %i' % score)
+    print('The score was achieved at: %f seconds' % timestamp)
+    print('The winning map is: ')
+    urban_planner_helpers.print_board(winning_map)
