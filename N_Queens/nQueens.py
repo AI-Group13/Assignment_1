@@ -83,14 +83,11 @@ def heuristic(currentPos, N):
 
     return currentScene, (attacks-len(currentScene))/2              # Returning the current positions of queens and number of queens attacking one-another
 
-def try_placement(allPos, currentScene, N):
+def try_placement(currentScene, N):
 
     # print (currentScene)
-    # print(allPos)
     new = currentScene
-
     scene_status = []
-
     for trialPos in currentScene:                                   # Trying all setups for each of the 6 queens
 
         # tempCurrentScene = currentScene
@@ -100,40 +97,39 @@ def try_placement(allPos, currentScene, N):
 
         for i in range(0, N):
 
-            print ("-----------------------")
-            print ("trial pos", trialPos)
+            # print ("*******************************************")
+            # print ("trial pos", trialPos)
 
             pos = (i, tp[1])
-            print ("position to check", pos)
+            # print ("position to check", pos)
             new[new.index(tp)] = pos
+            # print ("newSceen", new)
 
-            print ("newSceen", new)
-            
             tp = pos
 
             heuristicScene = [element[0] + element[1]*N for element in new]       # Queen positions in terms of consectuviely numbered squares
-            scene, heuristicvalue = heuristic(heuristicScene,N)  # Heuristic value for the new configuration obtained after shifting the queen to the new location
+            sc, heuristicvalue = heuristic(heuristicScene,N)  # Heuristic value for the new configuration obtained after shifting the queen to the new location
             cost = 10 + (trialPos[0] - pos[0]) ** 2
-
-            # scene_status.append([scene_status, cost, heuristicvalue])
-            # print (scene_status, cost, heuristicvalue)
-
-            print ("Cost of movement", cost)
+            #
+            # print ("Cost of movement", cost)
             # # print ("Heuristic Scene in grid format", new)
             # # print ("Heuristic Scene", heuristicScene)
-            print ("Heuristic Value", heuristicvalue)
-            print ("-----------------------")
+            # print ("Heuristic Value", heuristicvalue)
+            # print ("-----------------------")
 
-            print (tuple((new, cost, heuristicvalue)))
-            scene_status.append(tuple((new, cost, heuristicvalue)))
-            print (scene_status[-1])
-            print (" *********************************************** ")
+            # print ("tuple is", tuple((new, heuristicvalue, cost)))  #, cost, heuristicvalue)))
+            scene_status.append(tuple((tuple(new), heuristicvalue, cost)))
+            # print (" *********************************************** ")
 
-            #
 
         new[new.index(pos)] = trialPos
+    # print ("Final Scene equal to intial scene", new)
 
-    return currentScene, scene_status
+    return currentScene, scene_status                           # currentScene is the initially fed scene, scene_status has heuristic values and cost with the particular
+                                                                # placement scene
+
+
+
 
 # initial_scene(screen, N, point_list, square_size, red)
 
@@ -145,14 +141,8 @@ InitQueenLoc = initial_scene(screen, N, point_list, square_size, red)
 
 currentScene, attacks = heuristic(InitQueenLoc, N)
 
-curSce, scene_status = try_placement(allPos, currentScene, N)
-
+_ , scene_status= try_placement(currentScene, N)
 
 # for element in scene_status:
-#     print (element[0][0])
+#     print element
 
-print (scene_status[-1])
-
-
-# pygame.display.update()
-# time.sleep(1)
