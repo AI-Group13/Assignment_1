@@ -32,7 +32,6 @@ def generate_starting_boards(number_to_make, board_map):
     #Geenrates a board with shuffled values EXCEPT toxic and scenic sites
     list_of_starting_boards = []
     flat_board = np.array(board_map).flatten()
-    print(flat_board)
     shuffle_board = flat_board.copy()
 #    print(shuffle_board)
     toxic_loc = np.where(flat_board == 'x' )[0]
@@ -54,7 +53,6 @@ def generate_starting_boards(number_to_make, board_map):
             continue
         for i in range(len(new_tox_loc)):
             shuffle_board[new_tox_loc[i]],shuffle_board[toxic_loc[i]] = shuffle_board[toxic_loc[i]],shuffle_board[new_tox_loc[i]] 
-        print(shuffle_board)
         reshaped_board = np.reshape(shuffle_board.tolist(),(len(board_map),len(board_map[0])))
         list_of_starting_boards.append(reshaped_board.tolist())
         counter -= 1
