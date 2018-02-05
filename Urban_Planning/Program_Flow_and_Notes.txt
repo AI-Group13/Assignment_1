@@ -38,3 +38,13 @@ NOTES:
 Boards are stored as Board[Y][X], a list of rows, with each row being a list of spaces in that row
 
 
+WHO DOES WHAT:
+
+Dom:
+    Manhattan distance checker (specify format for Onkar)
+    Fitness Calculations (Genetic Algorithms)
+    start on Hillclimb
+
+Onkar:
+    Random placement of zones for genetic
+    mutation and selection (genetic)
