@@ -128,21 +128,7 @@ def try_placement(currentScene, N):
     return currentScene, scene_status                           # currentScene is the initially fed scene, scene_status has heuristic values and cost with the particular
                                                                 # placement scene
 
-
-
-
 # initial_scene(screen, N, point_list, square_size, red)
-
-grid_size = 4
-
-screen, white, red, black, pink, N, point_list, square_size, allPos = create_scene(grid_size)
-
-InitQueenLoc = initial_scene(screen, N, point_list, square_size, red)
-
-currentScene, attacks = heuristic(InitQueenLoc, N)
-
-_ , scene_status= try_placement(currentScene, N)
-
 # for element in scene_status:
 #     print element
 
