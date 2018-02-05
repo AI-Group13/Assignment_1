@@ -3,13 +3,12 @@
 import sys
 
 import genetic_algorithm
-import hill_climbing
 import urban_planner_helpers
 
 max_duration = 10 # 10 seconds
 number_organisms = 100
 
-mode = 'genetic'  # TODO choose based on Beck's preferred input method
+mode = 'algorithm'  # TODO choose based on Beck's preferred input method
 
 if __name__ == '__main__':
 
@@ -26,8 +25,10 @@ if __name__ == '__main__':
 
     generated_map_heuristics = []  # TODO find and generate maps
 
-    board_size_x = len(board_map)
-    board_size_y = len(board_map[0])
+    board_size_y = len(board_map)
+    board_size_x = len(board_map[0])
+
+    print(board_map)
 
     # empty holders for reported values
     score = 0
@@ -45,10 +46,10 @@ if __name__ == '__main__':
 
         working_boards = urban_planner_helpers.generate_starting_boards(1, board_size_x, board_size_y)
 
-        score, timestamp, winning_map = hill_climbing.hillclimb(board_map, working_boards, zone_tuple,
-                                                                generated_map_heuristics)
+        # score, timestamp, winning_map = hill_climbing.hillclimb(board_map, working_boards, zone_tuple,
+        #                                                         generated_map_heuristics)
 
-    print('The winning score was: %i' % score)
-    print('The score was achieved at: %f seconds' % timestamp)
-    print('The winning map is: ')
-    urban_planner_helpers.print_board(winning_map)
+    # print('The winning score was: %i' % score)
+    # print('The score was achieved at: %f seconds' % timestamp)
+    # print('The winning map is: ')
+    # urban_planner_helpers.print_board(winning_map)
