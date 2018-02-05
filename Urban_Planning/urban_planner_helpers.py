@@ -1,5 +1,7 @@
 # Module: urban_planner_helpers
 
+global doSRand
+doSRand = True
 
 # reads the input file and returns a tuple containing relevant data
 def read_input_file(path_to_input_file):
@@ -30,12 +32,15 @@ def read_input_file(path_to_input_file):
 def generate_empty_board(x, y):
     board = []
 
-    for row in range(y):
-        row_temp = []
-        for col in range(x):
-            row_temp.append(' ')
-        board.append(row_temp)
-        row_temp.clear()
+    row = []
+
+    for entry in range(x):
+        row.append('0')
+
+    for rows in range(y):
+        board.append(row)
+
+    return board
 
 
 def generate_starting_boards(number_to_make, x, y):
@@ -51,3 +56,47 @@ def generate_starting_boards(number_to_make, x, y):
 def print_board(board):
     for row in board:
         print(''.join(row))
+
+# def random_place(empty_board, zone_tuple, board_size_x, board_size_y):
+#     global doSRand
+#
+#     print('board is sized %ix%i' % (board_size_x, board_size_y))
+#
+#     num_industrial, num_commercial, num_residential = zone_tuple
+#
+#     if doSRand:
+#         random.seed()
+#         doSRand = False
+#
+#     ii = 0
+#     while ii < int(num_industrial):
+#         rand_x = random.randrange(board_size_x)
+#         rand_y = random.randrange(board_size_y)
+#
+#         print('rand is at %ix%i' % rand_x, rand_y)
+#
+#         if empty_board[rand_y][rand_x] is '0':
+#             empty_board[rand_y][rand_x] = 'I'
+#             ii += 1
+#
+#     # cc = 0
+#     # while cc < int(num_commercial):
+#     #     rand_x = random.randrange(board_size_x)
+#     #     rand_y = random.randrange(board_size_y)
+#     #
+#     #     if empty_board[rand_y][rand_x] is '0':
+#     #         empty_board[rand_y][rand_x] = 'C'
+#     #         cc += 1
+#     #
+#     # rr = 0
+#     # while rr < int(num_commercial):
+#     #     rand_x = random.randrange(board_size_x)
+#     #     rand_y = random.randrange(board_size_y)
+#     #
+#     #     if empty_board[rand_y][rand_x] is '0':
+#     #         empty_board[rand_y][rand_x] = 'R'
+#     #         rr += 1
+#
+#     return empty_board
+#
+#
