@@ -31,22 +31,23 @@ def generate_starting_boards(number_to_make, board_map):
     list_of_starting_boards = []
     flat_board = np.array(board_map).flatten()
     shuffle_board = flat_board.copy()
-    toxic_loc = np.where(flat_board == 'x')[0]
-    scenic_loc = np.where(flat_board== 'S')[0]
-    print(shuffle_board)
+#    print(shuffle_board)
+    toxic_loc = np.where(flat_board == 'x' )[0]
+    scenic_loc = np.where(flat_board == 'S')[0]
+    print(flat_board)
+    
+##Solution 1
+    
     for ii in range(number_to_make):
-        #shuffle_board = flat_board.copy()
         random.shuffle(shuffle_board)
-        #print(shuffle_board)
         new_scenic_loc = np.where(shuffle_board == 'S')[0]
         for i in range(len(new_scenic_loc)):
-            if shuffle_board[scenic_loc[i]] != shuffle_board[new_scenic_loc[i]]:
-                shuffle_board[scenic_loc[i]],shuffle_board[new_scenic_loc[i]] = shuffle_board[new_scenic_loc[i]],shuffle_board[scenic_loc[i]]
+            shuffle_board[scenic_loc[i]],shuffle_board[new_scenic_loc[i]] = shuffle_board[new_scenic_loc[i]],shuffle_board[scenic_loc[i]]
         new_tox_loc = np.where(shuffle_board == 'x')[0]
         for i in range(len(new_tox_loc)):
-            if shuffle_board[toxic_loc[i]] != shuffle_board[new_tox_loc[i]]:
-                shuffle_board[toxic_loc[i]],shuffle_board[new_tox_loc[i]] = shuffle_board[new_tox_loc[i]],shuffle_board[toxic_loc[i]]   
-        print(shuffle_board, 'new')
+            shuffle_board[toxic_loc[i]],shuffle_board[new_tox_loc[i]] = shuffle_board[new_tox_loc[i]],shuffle_board[toxic_loc[i]] 
+        print(shuffle_board)
         list_of_starting_boards.append(shuffle_board)
+        
     return list_of_starting_boards
 

@@ -30,11 +30,11 @@ if __name__ == '__main__':
     pathToFile = sys.argv[1]
     print(sys.argv[1])
     
-    (num_industrial, num_commercial, num_residential, board_map) = urban_planner_helpers.read_input_file(pathToFile)
+    (num_industrial, num_commercial, num_residential, board_map) = urban_planner_helpers_v2.read_input_file(pathToFile)
     board_size_x = len(board_map)
     board_size_y = len(board_map[0])
 
-    list_of_hill_climbs = urban_planner_helpers.generate_starting_boards(number_boards, board_map)
+    list_of_hill_climbs = urban_planner_helpers_v2.generate_starting_boards(number_boards, board_map)
 
     start_time = time.time()
 
