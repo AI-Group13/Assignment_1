@@ -21,6 +21,7 @@ Genetics:
 
     Mutation
         Remove a zone, add it back somewhere else (random?)
+        Don't mutate Elite
 
     How to get back lost boards?
         After culling currently number stays static
