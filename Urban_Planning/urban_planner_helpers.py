@@ -24,7 +24,7 @@ def read_input_file(path_to_input_file):
     board = []
 
     for ii in range (3, length):
-        board.append(list(line_list[ii]))
+        board.append(line_list[ii].split(','))
 
     return num_industrial, num_commercial, num_residential, board
 

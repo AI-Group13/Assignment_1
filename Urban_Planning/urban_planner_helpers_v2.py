@@ -12,9 +12,8 @@ def read_input_file(path_to_input_file):
     except IOError as e:
         print('Could not open the input file (%s).' % e)
         return
-
+    
     length = len(line_list)
-
     num_industrial = line_list[0]
     num_commercial = line_list[1]
     num_residential = line_list[2]
@@ -22,7 +21,8 @@ def read_input_file(path_to_input_file):
     board = []
     
     for ii in range (3, length):
-        board.append(list(line_list[ii]))
+        #board.append(list(line_list[ii]))
+        board.append(line_list[ii].split(','))
 
     return num_industrial, num_commercial, num_residential, board
 
