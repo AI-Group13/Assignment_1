@@ -3,7 +3,7 @@
 import sys
 import time
 import urban_planner_helpers_v2
-
+import timeit
 #Test
 from random import shuffle
 
@@ -21,7 +21,8 @@ def genetics():
 
 
 if __name__ == '__main__':
-
+    
+    timeit.timeit()
     # check to make sure a valid input path was given, exit otherwise
     if len(sys.argv) is 1:
         print("You must provide the path to the input text file")
@@ -46,3 +47,4 @@ if __name__ == '__main__':
 
         # do genetic engineering
 #        genetics()
+        
