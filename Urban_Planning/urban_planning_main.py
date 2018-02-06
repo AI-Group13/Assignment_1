@@ -5,7 +5,7 @@ import sys
 import genetic_algorithm
 import urban_planner_helpers
 
-max_duration = 10 # 10 seconds
+max_duration = 10  # 10 seconds
 number_organisms = 100
 
 mode = 'algorithm'  # TODO choose based on Beck's preferred input method
@@ -23,31 +23,29 @@ if __name__ == '__main__':
 
     zone_tuple = (num_industrial, num_commercial, num_residential)
 
-    generated_map_heuristics = []  # TODO find and generate maps
+    generated_map_heuristics = urban_planner_helpers.generate_start_heuristics(board_map)
 
     board_size_y = len(board_map)
     board_size_x = len(board_map[0])
 
-    print(board_map)
-
     # empty holders for reported values
-    score = 0
-    timestamp = 0
-    winning_map = board_map
-
-    if mode is 'genetic':
-
-        working_boards = urban_planner_helpers.generate_starting_boards(number_organisms, board_size_x, board_size_y)
-
-        score, timestamp, winning_map = genetic_algorithm.genetics(board_map, working_boards, zone_tuple,
-                                                                   generated_map_heuristics)
-
-    elif mode is 'algorithm':
-
-        working_boards = urban_planner_helpers.generate_starting_boards(1, board_size_x, board_size_y)
-
-        # score, timestamp, winning_map = hill_climbing.hillclimb(board_map, working_boards, zone_tuple,
-        #                                                         generated_map_heuristics)
+    # score = 0
+    # timestamp = 0
+    # winning_map = board_map
+    #
+    # if mode is 'genetic':
+    #
+    #     working_boards = urban_planner_helpers.generate_starting_boards(number_organisms, board_size_x, board_size_y)
+    #
+    #     score, timestamp, winning_map = genetic_algorithm.genetics(board_map, working_boards, zone_tuple,
+    #                                                                generated_map_heuristics)
+    #
+    # elif mode is 'algorithm':
+    #
+    #     working_boards = urban_planner_helpers.generate_starting_boards(1, board_size_x, board_size_y)
+    #
+    #     # score, timestamp, winning_map = hill_climbing.hillclimb(board_map, working_boards, zone_tuple,
+    #     #                                                         generated_map_heuristics)
 
     # print('The winning score was: %i' % score)
     # print('The score was achieved at: %f seconds' % timestamp)
