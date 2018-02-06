@@ -4,7 +4,10 @@ import pygame
 import math
 import time
 import random
-from nQueens import initialize_pygame, create_scene, initial_scene, heuristic, try_placement
+from nQueens import initial_scene, heuristic, try_placement
+
+from nQueens_HillClimb import greedy_hillClimb
+
 
 # screen, white, red, black, pink, blue = initialize_pygame(1000, 1000)
 
@@ -24,25 +27,27 @@ def read_input_file(path_to_input_file):
         algo_used = lines[1]
         print ("algo_used is ", algo_used )
 
-    return grid_size, algo_used
+    return grid_size, int(algo_used)
 
 
 def main():
 
+    t_start = time.time()
     grid_size, algo_used = read_input_file('/media/akshay/OS/Imported/WorcesterPolytechnicInstitute/Sem II/Artificial Intelligence/searchAlgos/input.txt')
 
-    screen, white, red, black, pink, N, point_list, square_size, allPos = create_scene(grid_size)
+    if algo_used==1:
+        # a_star()
+        print ("A star algo will be used")
 
-    InitQueenLoc = initial_scene(screen, N, point_list, square_size, red)
-
-    currentScene, attacks = heuristic(InitQueenLoc, N)
-
-    try_placement(allPos, currentScene, N)
-
-    pygame.display.update()
+    elif algo_used==2:
+        InitQueenLoc = initial_scene(grid_size)  # screen, N, point_list, square_size, red)
+        greedy_hillClimb(InitQueenLoc,grid_size)
+    print ("Complete")
+    time_taken = (time.time() - t_start)
+    print ("Time taken", time_taken )
 
 if __name__ == '__main__':
 
     main()
-    pygame.display.update()
-    time.sleep(10)
+    # pygame.display.update()
+    # time.sleep(10)
