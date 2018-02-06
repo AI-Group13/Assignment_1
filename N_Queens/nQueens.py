@@ -6,7 +6,10 @@ import math
 import time
 import random
 
-# ---------------------------------------------------------------
+
+#---------------Visualization section starts------------------------#
+
+
 # Setting up pygame variables
 def initialize_pygame(config_space_x, config_space_y):
     pygame.init()
@@ -32,8 +35,6 @@ def create_scene(N):
     # print (point_list)
     # print (len(point_list))
 
-    allPos = [(i,j) for i in range(0,N) for j in range(0,N)]        # Numbering squares with column-row notation
-
     for t in range(0,N):
         for q in range(0,N):
             p+=1
@@ -42,22 +43,32 @@ def create_scene(N):
             else:
                 color = black
             pygame.draw.rect(screen, color, (point_list[p][0], point_list[p][1], square_size, square_size ))      #Checkerboard colouring of squares
-    return screen, white, red, black, pink, N, point_list, square_size, allPos
+    return screen, white, red, black, pink, N, point_list, square_size
 
 
 # ---------------------------------------------------------------
 # Creating the initial scene with randomly distributed Queens
-def initial_scene(screen, N, point_list, square_size, red):
+def initial_scene( N, screen=0, point_list=0, square_size=0, red=0, loc_visualize = 0):
 
     InitQueenLoc = [random.randint(0,N-1)+i*N  for i in range(0,N)]         #Randomly generating a cconfiguration for the setup to start in
     # print (InitQueenLoc)
 
-    for loc in InitQueenLoc:
-        pygame.draw.circle(screen, red, (point_list[loc][0]+square_size/2, point_list[loc][1] +square_size/2), int(square_size*0.3)) #Visualizing the initial config
-    # pygame.display.update()
-    # time.sleep(511)
+    if loc_visualize!=0:
+        locs = [element[0] + element[1]*N for element in loc_visualize]
+        for loc in locs:
+            pygame.draw.circle(screen, red, (point_list[loc][0]+square_size/2, point_list[loc][1] +square_size/2), int(square_size*0.3)) #Visualizing the initial config
+        pygame.display.update()
+        time.sleep(0.1)
 
     return InitQueenLoc
+
+
+
+#---------------Visualization section ends ------------------------#
+
+
+
+#---------------Calculation section starts-------------------------#
 
 
 # ---------------------------------------------------------------
@@ -83,6 +94,9 @@ def heuristic(currentPos, N):
 
     return currentScene, (attacks-len(currentScene))/2              # Returning the current positions of queens and number of queens attacking one-another
 
+
+# ---------------------------------------------------------------
+# Calculating heurstics for the current scene at different individual position of the Queens
 def try_placement(currentScene, N):
 
     # print (currentScene)
@@ -112,8 +126,8 @@ def try_placement(currentScene, N):
             cost = 10 + (trialPos[0] - pos[0]) ** 2
             #
             # print ("Cost of movement", cost)
-            # # print ("Heuristic Scene in grid format", new)
-            # # print ("Heuristic Scene", heuristicScene)
+            # print ("Heuristic Scene in grid format", new)
+            # print ("Heuristic Scene", heuristicScene)
             # print ("Heuristic Value", heuristicvalue)
             # print ("-----------------------")
 
@@ -128,7 +142,8 @@ def try_placement(currentScene, N):
     return currentScene, scene_status                           # currentScene is the initially fed scene, scene_status has heuristic values and cost with the particular
                                                                 # placement scene
 
-# initial_scene(screen, N, point_list, square_size, red)
 # for element in scene_status:
 #     print element
 
+
+#---------------Calculation section end-------------------------#
