@@ -34,7 +34,7 @@ def generate_starting_boards(number_to_make, board_map):
     flat_board = np.array(board_map).flatten()
     shuffle_board = flat_board.copy()
 #    print(shuffle_board)
-    toxic_loc = np.where(flat_board == 'x' )[0]
+    toxic_loc = np.where(flat_board == 'X' )[0]
     scenic_loc = np.where(flat_board == 'S')[0]
 #    print(scenic_loc1)
     
@@ -48,7 +48,7 @@ def generate_starting_boards(number_to_make, board_map):
             continue
         for i in range(len(new_scenic_loc)):
             shuffle_board[new_scenic_loc[i]],shuffle_board[scenic_loc[i]] = shuffle_board[scenic_loc[i]],shuffle_board[new_scenic_loc[i]]
-        new_tox_loc = np.where(shuffle_board == 'x')[0]
+        new_tox_loc = np.where(shuffle_board == 'X')[0]
         if np.intersect1d(toxic_loc,new_tox_loc).size:
             continue
         for i in range(len(new_tox_loc)):
@@ -58,4 +58,51 @@ def generate_starting_boards(number_to_make, board_map):
         counter -= 1
         
     return list_of_starting_boards
+
+def generate_mashed_maps(list_of_hill_climbs, elite_maps, normal_maps):
+    
+    new_maps_length = len(list_of_hill_climbs) - len(elite_maps)
+        
+    while len(normal_maps) != new_maps_length:
+        normal_maps.append(random.choice(normal_maps))
+    
+    while len(elite_maps) != new_maps_length:
+        elite_maps.append(random.choice(elite_maps))
+
+    new_maps = []
+    
+    for i in range(len(elite_maps)):
+        new_maps.append(basic_selection_approach(elite_maps[i],normal_maps[i]))
+    
+    
+    return new_maps
+    
+def basic_selection_approach(elite_map,normal_map):
+    
+    flat_elite = np.array(elite_map).flatten()
+    flat_normal = np.array(normal_map).flatten()
+    
+    flat_map_length = len(flat_elite)
+    half_length = int(flat_map_length*0.5)
+    new_map = []
+    mashup_chooser = np.random.randint(2,size=1)
+
+    if mashup_chooser == 1:
+        for i in range(flat_map_length):
+            if i<half_length:
+                new_map.append(flat_elite[i])
+            else:
+                new_map.append(flat_normal[i])
+    if mashup_chooser == 0:
+        for i in range(flat_map_length):
+            if i<half_length:
+                new_map.append(flat_normal[i])
+            else:
+                new_map.append(flat_elite[i])    
+    new_map = np.reshape(new_map,(len(elite_map),len(elite_map[0])))
+    return new_map.tolist()
+    
+
+        
+        
 
