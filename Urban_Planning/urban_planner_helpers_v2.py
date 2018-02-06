@@ -72,9 +72,10 @@ def generate_mashed_maps(list_of_hill_climbs, elite_maps, normal_maps):
     new_maps = []
     
     for i in range(len(elite_maps)):
-        new_maps.append(basic_selection_approach(elite_maps[i],normal_maps[i]))
+        new_maps.append(proper_selection_approach(elite_maps[i],normal_maps[i]))
     
     
+#    proper_selection_approach(elite_maps[1],normal_maps[1])
     return new_maps
     
 def basic_selection_approach(elite_map,normal_map):
@@ -101,8 +102,49 @@ def basic_selection_approach(elite_map,normal_map):
                 new_map.append(flat_elite[i])    
     new_map = np.reshape(new_map,(len(elite_map),len(elite_map[0])))
     return new_map.tolist()
-    
 
+def proper_selection_approach(elite_map,normal_map):
+    
+    flat_elite = np.array(elite_map).flatten()
+    flat_normal = np.array(normal_map).flatten()
+    
+#    flat_elite = np.array(['X' ,'R' ,'X' ,'I' ,'C' ,'1' ,'2' ,'R' ,'4', 'S', '5', 'I'])
+#    flat_normal = np.array(['X', '5', 'X', '2' ,'I' ,'1', 'R', '4' ,'I' ,'S' ,'C' ,'R'])
+    print(flat_elite)
+    print('...')
+    print(flat_normal)
+    ct = 0
+    if not intersect(flat_elite,'C',flat_normal,'R'):
+        print('sth')
+        if not intersect(flat_elite,'I',flat_normal,'R'):
+            print('Put R of normal in elite')
+            ct = 1
+    if not intersect(flat_elite,'R',flat_normal,'C'):
+        print('sth')
+        if not intersect(flat_elite,'I',flat_normal,'C'):
+            print('Put C of normal in elite')
+            ct = 1
+            
+    if not intersect(flat_elite,'I',flat_normal,'C'):
+        print('sth')
+        if not intersect(flat_elite,'R',flat_normal,'C'):
+            print('Put C of normal in elite')
+            ct = 1
+            
+    if not intersect(flat_elite,'C',flat_normal,'I'):
+        print('sth')
+        if not intersect(flat_elite,'R',flat_normal,'I'):
+            print('Put I of normal in elite')
+            ct = 1
+            
+    if ct == 0:
+        print('failed to find solution')            
+
+def intersect(map1,K,map2,L):
+    return np.intersect1d(np.where(map1 == K)[0],np.where(map2 == L)[0]).any()
+    
+    
+    
         
         
 

@@ -9,7 +9,7 @@ from random import shuffle
 import numpy as np
 
 max_duration = 10 # 10 seconds
-number_boards = 10
+number_boards = 100
 
 
 # filler functions
@@ -30,7 +30,6 @@ def genetics(list_of_hill_climbs):
     elite_maps = list_of_hill_climbs[:int(len(list_of_hill_climbs)*elite_ratio)]
     normal_maps = list_of_hill_climbs[int(len(list_of_hill_climbs)*elite_ratio):int((len(list_of_hill_climbs)*(elite_ratio+normal_ratio)))]
     new_maps = urban_planner_helpers_v2.generate_mashed_maps(list_of_hill_climbs,elite_maps,normal_maps)
-    print(new_maps)
     #Temporary score map
     
     
@@ -59,7 +58,8 @@ if __name__ == '__main__':
     ## placeholder-code for selection
     
     still_computing = True
-    
+    flat_elite = np.array(['X' ,'R' ,'X' ,'I' ,'C' ,'1' ,'2' ,'R' ,'4', 'S', '5', 'I'])
+    flat_normal = np.array(['X', '5', 'X', '2' ,'I' ,'1', 'R', '4' ,'I' ,'S' ,'C' ,'R'])
     genetics(list_of_hill_climbs)
 
 #    while (time.time() - start_time) < max_duration and still_computing:
