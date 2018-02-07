@@ -59,22 +59,21 @@ def generate_starting_boards(number_to_make, board_map):
         
     return list_of_starting_boards
 
-def generate_mashed_maps(list_of_hill_climbs, elite_maps, normal_maps):
+def selection(list_of_hill_climbs, elite_maps, normal_maps):
     
     new_maps_length = len(list_of_hill_climbs) - len(elite_maps)
-        
-    while len(normal_maps) != new_maps_length:
-        normal_maps.append(random.choice(normal_maps))
     
-    while len(elite_maps) != new_maps_length:
-        elite_maps.append(random.choice(elite_maps))
-
+    expanded_elites, expanded_normals = list(elite_maps),list(normal_maps)
+    while len(expanded_normals) != new_maps_length:
+        expanded_normals.append(random.choice(expanded_normals))
+    
+    while len(expanded_elites) != new_maps_length:
+        expanded_elites.append(random.choice(expanded_elites))
+    
     new_maps = []
     
-    for i in range(len(elite_maps)):
-        new_maps.append(proper_selection_approach(elite_maps[i],normal_maps[i]))
-    
-    
+    for i in range(len(expanded_elites)):
+        new_maps.append(proper_selection_approach(expanded_elites[i],expanded_normals[i]))    
 #    proper_selection_approach(elite_maps[1],normal_maps[1])
     return new_maps
     
@@ -101,7 +100,7 @@ def basic_selection_approach(elite_map,normal_map):
             else:
                 new_map.append(flat_elite[i])    
     new_map = np.reshape(new_map,(len(elite_map),len(elite_map[0])))
-    return new_map.tolist()
+    return np.array(new_map)
 
 def proper_selection_approach(elite_map,normal_map):
     
@@ -110,41 +109,67 @@ def proper_selection_approach(elite_map,normal_map):
     
 #    flat_elite = np.array(['X' ,'R' ,'X' ,'I' ,'C' ,'1' ,'2' ,'R' ,'4', 'S', '5', 'I'])
 #    flat_normal = np.array(['X', '5', 'X', '2' ,'I' ,'1', 'R', '4' ,'I' ,'S' ,'C' ,'R'])
-    print(flat_elite)
-    print('...')
-    print(flat_normal)
     ct = 0
-    if not intersect(flat_elite,'C',flat_normal,'R'):
-        print('sth')
-        if not intersect(flat_elite,'I',flat_normal,'R'):
-            print('Put R of normal in elite')
-            ct = 1
-    if not intersect(flat_elite,'R',flat_normal,'C'):
-        print('sth')
-        if not intersect(flat_elite,'I',flat_normal,'C'):
-            print('Put C of normal in elite')
-            ct = 1
-            
-    if not intersect(flat_elite,'I',flat_normal,'C'):
-        print('sth')
+    while(ct==0):
+        if not intersect(flat_elite,'C',flat_normal,'R'):
+            if not intersect(flat_elite,'I',flat_normal,'R'):
+#                print('Put R of normal in elite')
+                flat_elite[np.where(flat_elite == 'R')] = 0
+                flat_elite[np.where(flat_normal == 'R')] = 'R'
+                ct = 1
+                
         if not intersect(flat_elite,'R',flat_normal,'C'):
-            print('Put C of normal in elite')
-            ct = 1
+            if not intersect(flat_elite,'I',flat_normal,'C'):
+#                print('Put C of normal in elite')
+                flat_elite[np.where(flat_elite == 'C')] = 0
+                flat_elite[np.where(flat_normal == 'C')] = 'C'
+                ct = 1
+        
+        if not intersect(flat_elite,'I',flat_normal,'C'):
+            if not intersect(flat_elite,'R',flat_normal,'C'):
+#                print('Put C of normal in elite')
+                flat_elite[np.where(flat_elite == 'C')] = 0
+                flat_elite[np.where(flat_normal == 'C')] = 'C'
+                ct = 1
             
-    if not intersect(flat_elite,'C',flat_normal,'I'):
-        print('sth')
-        if not intersect(flat_elite,'R',flat_normal,'I'):
-            print('Put I of normal in elite')
-            ct = 1
-            
-    if ct == 0:
-        print('failed to find solution')            
+        if not intersect(flat_elite,'C',flat_normal,'I'):
+            if not intersect(flat_elite,'R',flat_normal,'I'):
+#                print('Put I of normal in elite')
+                flat_elite[np.where(flat_elite == 'I')] = 0
+                flat_elite[np.where(flat_normal == 'I')] = 'I'
+                ct = 1
+                
+#        if not intersect(flat_elite,'R',flat_normal,'I'):
+#            print('sth')
+#            if not intersect(flat_elite,'C',flat_normal,'I'):
+#                print('Put I of normal in elite')
+#                ct = 1 
+#                
+#        if not intersect(flat_elite,'I',flat_normal,'R'):
+#            print('sth')
+#            if not intersect(flat_elite,'C',flat_normal,'R'):
+#                print('Put R of normal in elite')
+#                ct = 1
+                
+        if ct == 0:
+            flat_normal = mutate(flat_normal)
+#            print('failed to find solution')
+
+    flat_elite = np.reshape(flat_elite.tolist(),(len(elite_map),len(elite_map[0])))
+    return flat_elite.tolist()            
 
 def intersect(map1,K,map2,L):
     return np.intersect1d(np.where(map1 == K)[0],np.where(map2 == L)[0]).any()
-    
-    
-    
+
+
+def mutate(input_map):
+    input_map = np.array(input_map).flatten()
+    vals_to_avoid = np.concatenate((np.where(input_map == 'X')[0],np.where(input_map == 'S')[0]))
+    all_vals = [i for i in range(len(input_map))]
+    vals_to_move = list(set(all_vals) - set(vals_to_avoid.tolist()))
+    (r1,r2) = (np.random.choice(vals_to_move),np.random.choice(vals_to_move))
+    input_map[r1],input_map[r2] = input_map[r2],input_map[r1]
+    return input_map
         
         
 

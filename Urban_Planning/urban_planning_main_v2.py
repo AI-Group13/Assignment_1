@@ -23,13 +23,28 @@ def genetics(list_of_hill_climbs):
     elite_ratio = 0.3
     normal_ratio = 0.3
     
+    mutation_ratio = 0.1   #Can't be greater than  (1-elite_ratio)
+    
     #Plceholder score-map
     score_map = np.random.randint(100, size=100)
     
-    #Placeholder Elite seelction
+    #Placeholder Elite selction
     elite_maps = list_of_hill_climbs[:int(len(list_of_hill_climbs)*elite_ratio)]
     normal_maps = list_of_hill_climbs[int(len(list_of_hill_climbs)*elite_ratio):int((len(list_of_hill_climbs)*(elite_ratio+normal_ratio)))]
-    new_maps = urban_planner_helpers_v2.generate_mashed_maps(list_of_hill_climbs,elite_maps,normal_maps)
+    
+    Maps_to_mutate = normal_maps
+    mutation_indices = np.random.choice([i for i in range(len(Maps_to_mutate))],int(len(list_of_hill_climbs)*mutation_ratio)).tolist()
+    for i in mutation_indices:
+        Maps_to_mutate[i] = urban_planner_helpers_v2.mutate(Maps_to_mutate[i])
+
+    new_maps = urban_planner_helpers_v2.selection(list_of_hill_climbs,elite_maps,normal_maps)
+#    print(len(normal_maps))
+#    print(mutation_indices.tolist())
+#    print(new_maps[mutation_indices.tolist()])
+
+    
+    
+    
     #Temporary score map
     
     
@@ -58,8 +73,9 @@ if __name__ == '__main__':
     ## placeholder-code for selection
     
     still_computing = True
-    flat_elite = np.array(['X' ,'R' ,'X' ,'I' ,'C' ,'1' ,'2' ,'R' ,'4', 'S', '5', 'I'])
-    flat_normal = np.array(['X', '5', 'X', '2' ,'I' ,'1', 'R', '4' ,'I' ,'S' ,'C' ,'R'])
+#    flat_elite = np.array(['X' ,'R' ,'X' ,'I' ,'C' ,'1' ,'2' ,'R' ,'4', 'S', '5', 'I'])
+#    flat_normal = np.array(['X', '5', 'X', '2' ,'I' ,'1', 'R', '4' ,'I' ,'S' ,'C' ,'R'])
+#    urban_planner_helpers_v2.proper_selection_approach(flat_elite,flat_normal)
     genetics(list_of_hill_climbs)
 
 #    while (time.time() - start_time) < max_duration and still_computing:
