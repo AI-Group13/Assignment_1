@@ -20,9 +20,9 @@ def read_input_file(path_to_input_file):
 
     length = len(line_list)
 
-    num_industrial = line_list[0]
-    num_commercial = line_list[1]
-    num_residential = line_list[2]
+    num_industrial = int(line_list[0])
+    num_commercial = int(line_list[1])
+    num_residential = int(line_list[2])
 
     board = []
 
