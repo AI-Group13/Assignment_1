@@ -60,7 +60,7 @@ def generate_starting_boards(number_to_make, board_map):
         
     return list_of_starting_boards
 
-def selection(list_of_hill_climbs, elite_maps, normal_maps):
+def cross_over(list_of_hill_climbs, elite_maps, normal_maps):
     
     new_maps_length = len(list_of_hill_climbs) - len(elite_maps)
     expanded_elites, expanded_normals = list(elite_maps),list(normal_maps)
@@ -139,9 +139,34 @@ def Add_zones(Empty_map,Res_zones,Ind_zones,Com_zones):
         np.random.shuffle(vals_to_change)
         vals_to_change = vals_to_change[:len(zone_list)]
         Zoned_map[vals_to_change] = [zone_list]
-        
         return np.reshape(Zoned_map.tolist(),(len(Empty_map),len(Empty_map[0])))
     else:
         print('Invalid number of zones')
     
-
+def shift_zone(input_map):
+    ip_map = np.array(input_map).flatten()
+    shift_map = ip_map.copy()
+    vals_to_avoid = np.concatenate((np.where(ip_map == 'X')[0],np.where(ip_map == 'S')[0]))
+    all_vals = [i for i in range(len(ip_map))]
+    vals_to_change = list(set(all_vals) - set(vals_to_avoid.tolist()))
+    val_other_zones = np.concatenate((np.where(ip_map == 'C')[0],np.where(ip_map == 'R')[0],np.where(ip_map == 'I')[0])).tolist()
+    val_without_zones = list(set(vals_to_change) - set(val_other_zones))
+    scores = []
+    zones = ['R','I','C']
+    for x in range(3):
+        val_zone = np.where(ip_map == zones[x])[0].tolist()
+        for i in range(len(val_zone)):
+            shift_map[val_zone[i]] = 0
+            for j in range(len(val_without_zones)):
+                shift_map[val_without_zones[j]] = zones[x]
+    #            print(np.reshape(shift_map.tolist(),(len(input_map),len(input_map[0]))))
+#                print(shift_map)
+                ''' put score function here'''
+                score = np.random.randint(-20,50,1)
+                zipped = np.append(shift_map,score)
+    #            print(zipped)
+                scores.append(zipped)
+                shift_map[val_without_zones[j]] = 0
+            shift_map[val_zone[i]] = zones[x]
+    return scores
+        

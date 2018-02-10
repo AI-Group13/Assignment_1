@@ -13,9 +13,30 @@ number_boards = 100
 
 
 # filler functions
-def hillclimb():
+def hillclimb(Zoned_board):
 
-    return
+    termination_parameter = 4
+    
+    score_counter = 0
+    repetition_counter = 0
+    hillclimb_board = Zoned_board.copy()
+    
+    while(repetition_counter != termination_parameter):
+        scoooores = urban_planner_helpers_v2.shift_zone(hillclimb_board)
+        actual_scores = [int(i[-1]) for i in scoooores]
+        loc_max_score = np.where(actual_scores == np.max(actual_scores))[0]
+        next_move = scoooores[loc_max_score[0]][:-1]
+        if score_counter < np.max(actual_scores):
+            score_counter = np.max(actual_scores)
+        else:
+            repetition_counter += 1
+        hillclimb_board = next_move
+    
+    ''' use Zoned_board = urban_planner_helpers_v2.generate_starting_boards(1,Zoned_board) before starting another iteration'''
+    
+    print('done')
+    print(score_counter)
+    return score_counter 
 
 
 def genetics(list_of_hill_climbs):
@@ -36,10 +57,10 @@ def genetics(list_of_hill_climbs):
     for i in mutation_indices:
         Maps_to_mutate[i] = urban_planner_helpers_v2.mutate(Maps_to_mutate[i])
 
-    Selected_Mutated_maps = urban_planner_helpers_v2.selection(list_of_hill_climbs,elite_maps,normal_maps)
+    Crossover_Mutated_maps = urban_planner_helpers_v2.cross_over(list_of_hill_climbs,elite_maps,normal_maps)
     
-    New_mapset = elite_maps + Selected_Mutated_maps
-    print(np.array(New_mapset))
+    New_mapset = elite_maps + Crossover_Mutated_maps
+#    print(New_mapset[0])
     
     return
 
@@ -60,8 +81,9 @@ if __name__ == '__main__':
     board_size_y = len(board_map[0])
 
     Zoned_board = urban_planner_helpers_v2.Add_zones(board_map,num_residential,num_industrial,num_commercial)
+#    print(Zoned_board)
+    
     list_of_hill_climbs = urban_planner_helpers_v2.generate_starting_boards(number_boards, Zoned_board)
-
     start_time = time.time()
     
     ## placeholder-code for selection
@@ -71,6 +93,9 @@ if __name__ == '__main__':
 #    flat_normal = np.array(['X', '5', 'X', '2' ,'I' ,'1', 'R', '4' ,'I' ,'S' ,'C' ,'R'])
 #    urban_planner_helpers_v2.proper_selection_approach(flat_elite,flat_normal)
     genetics(list_of_hill_climbs)
+
+        
+    hillclimb(Zoned_board)
 
 #    while (time.time() - start_time) < max_duration and still_computing:
 #        for board in list_of_hill_climbs:
