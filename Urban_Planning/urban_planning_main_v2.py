@@ -15,6 +15,7 @@ number_boards = 100
 # filler functions
 def hillclimb(Zoned_board):
 
+    ''' The number of times you repeat the cycle to check if it hit the highest score, before restarts'''
     termination_parameter = 4
     
     score_counter = 0
