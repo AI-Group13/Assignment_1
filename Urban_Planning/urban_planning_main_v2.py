@@ -22,10 +22,10 @@ def hillclimb(Zoned_board):
     hillclimb_board = Zoned_board.copy()
     
     while(repetition_counter != termination_parameter):
-        scoooores = urban_planner_helpers_v2.shift_zone(hillclimb_board)
-        actual_scores = [int(i[-1]) for i in scoooores]
+        possible_maps_scores = urban_planner_helpers_v2.shift_zone(hillclimb_board)
+        actual_scores = [int(i[-1]) for i in possible_maps_scores]
         loc_max_score = np.where(actual_scores == np.max(actual_scores))[0]
-        next_move = scoooores[loc_max_score[0]][:-1]
+        next_move = possible_maps_scores[loc_max_score[0]][:-1]
         if score_counter < np.max(actual_scores):
             score_counter = np.max(actual_scores)
         else:
