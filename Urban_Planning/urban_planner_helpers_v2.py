@@ -133,32 +133,48 @@ def mutate(input_map):
     return input_map
 
 
+# this looks over a given map and uses the pregenerated cost maps to determine a score
 def calculate_fitness(organism_map, maps_cost):
+    # starting variable to add to to my hearts content
     score = 0
 
+    # find the location of all the different zones
     residential_locations = urban_planner_helpers.find_this_landmarks(organism_map, 'R')
     commercial_locations = urban_planner_helpers.find_this_landmarks(organism_map, 'C')
     industrial_locations = urban_planner_helpers.find_this_landmarks(organism_map, 'I')
 
+    # unpack the tuple of cost maps
     res_cost, com_cost, ind_cost = maps_cost
-
+    # for each residential zone:
     for zone in residential_locations:
 
+        # check in my cost maps to make sure I didn't get a dump or view in my landmarks.
+        #  Shouldn't but I like being explicit
         # TODO see if this check is even needed later on
         if res_cost[zone[1]][zone[0]] != 'X' and res_cost[zone[1]][zone[0]] != 'S':
+            # This is checking in the cost map, so the only valid entries besides X and S are negative Ints
             score += res_cost[zone[1]][zone[0]]
 
+        # Find all the spots around me that can have benefits or drawbacks (3 for Residential locations)
         surrounding_zone = urban_planner_helpers.find_list_of_points_manhattan_away(zone[0], zone[1], 3)
+
+        # for each of the surrounding spots:
         for spot in surrounding_zone:
+
+            # take out the locations
             x = spot[0]
             y = spot[1]
+
+            # store the value as a temp
             map_val = organism_map[y][x]
 
+            # depending on what it finds, increment or decrement the score by 5
             if map_val == 'R':
                 score += 5
             elif map_val == 'I':
                 score -= 5
 
+    # repeat for commercial and industrial
     for zone in commercial_locations:
 
         # TODO see if this check is even needed later on
@@ -198,6 +214,7 @@ def calculate_fitness(organism_map, maps_cost):
             if map_val == 'I':
                 score += 3
 
+    # after all that scoring, gimme the value
     return score
 
 
@@ -211,7 +228,9 @@ def Add_zones(Empty_map, Res_zones, Ind_zones, Com_zones):
         np.random.shuffle(vals_to_change)
         vals_to_change = vals_to_change[:len(zone_list)]
         Zoned_map[vals_to_change] = [zone_list]
-        return np.reshape(Zoned_map.tolist(), (len(Empty_map), len(Empty_map[0])))
+        Zoned_map = np.reshape(Zoned_map.tolist(), (len(Empty_map), len(Empty_map[0])))
+        print()
+        return Zoned_map
     else:
         print('Invalid number of zones')
 
