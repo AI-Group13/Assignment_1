@@ -39,6 +39,7 @@ def generate_starting_boards(number_to_make, board_map):
     # Geenrates a board with shuffled values EXCEPT toxic and scenic sites
     list_of_starting_boards = []
     flat_board = np.array(board_map).flatten()
+#    print(flat_board)
     shuffle_board = flat_board.copy()
     #    print(shuffle_board)
     toxic_loc = np.where(flat_board == 'X')[0]
@@ -64,7 +65,8 @@ def generate_starting_boards(number_to_make, board_map):
         reshaped_board = np.reshape(shuffle_board.tolist(), (board_size_y, board_size_x))
         list_of_starting_boards.append(reshaped_board.tolist())
         counter -= 1
-        
+    if len(list_of_starting_boards) == 1:
+        list_of_starting_boards = list_of_starting_boards[0]
     return list_of_starting_boards
 
 
@@ -249,13 +251,17 @@ def Add_zones(Empty_map, Res_zones, Ind_zones, Com_zones):
         vals_to_change = vals_to_change[:len(zone_list)]
         Zoned_map[vals_to_change] = [zone_list]
         Zoned_map = np.reshape(Zoned_map.tolist(), (len(Empty_map), len(Empty_map[0])))
-        print()
         return Zoned_map
     else:
         print('Invalid number of zones')
 
 
-def shift_zone(input_map):
+def shift_zone(input_map,heuristics):
+    r = len(input_map)
+    if r == 1:
+        input_map = input_map[0]
+    r = len(input_map)
+    c = len(input_map[0])
     ip_map = np.array(input_map).flatten()
     shift_map = ip_map.copy()
     vals_to_avoid = np.concatenate((np.where(ip_map == 'X')[0], np.where(ip_map == 'S')[0]))
@@ -275,7 +281,7 @@ def shift_zone(input_map):
                 #            print(np.reshape(shift_map.tolist(),(len(input_map),len(input_map[0]))))
                 #                print(shift_map)
                 ''' put score function here'''
-                score = np.random.randint(-20, 50, 1)
+                score = calculate_fitness(np.reshape(shift_map,(r,c)),heuristics)
                 zipped = np.append(shift_map, score)
                 #            print(zipped)
                 scores.append(zipped)

@@ -14,8 +14,10 @@ number_boards = 100
 
 
 # filler functions
-def hillclimb(Zoned_board):
+def hillclimb(Zoned_board,heuristics):
     ''' The number of times you repeat the cycle to check if it hit the highest score, before restarts'''
+    r = len(Zoned_board)
+    c = len(Zoned_board[0])
     termination_parameter = 4
 
     score_counter = 0
@@ -23,7 +25,7 @@ def hillclimb(Zoned_board):
     hillclimb_board = list(Zoned_board)
 
     while (repetition_counter != termination_parameter):
-        possible_maps_scores = urban_planner_helpers_v2.shift_zone(hillclimb_board)
+        possible_maps_scores = urban_planner_helpers_v2.shift_zone(hillclimb_board,heuristics)
         actual_scores = [int(i[-1]) for i in possible_maps_scores]
         loc_max_score = np.where(actual_scores == np.max(actual_scores))[0]
         next_move = possible_maps_scores[loc_max_score[0]][:-1]
@@ -31,10 +33,10 @@ def hillclimb(Zoned_board):
             score_counter = np.max(actual_scores)
         else:
             repetition_counter += 1
-        hillclimb_board = next_move
+        hillclimb_board = np.reshape(next_move,(r,c))
 
     ''' use Zoned_board = urban_planner_helpers_v2.generate_starting_boards(1,Zoned_board) before starting another iteration'''
-
+#    print(score_counter)
     return score_counter
 
 
@@ -81,14 +83,15 @@ if __name__ == '__main__':
     board_size_y = len(board_map[0])
     
     zone_tuple = (num_industrial, num_commercial, num_residential)
-    generated_map_heuristics = urban_planner_helpers.generate_start_heuristics(board_map)
+    heuristics = urban_planner_helpers.generate_start_heuristics(board_map)
        
-#    rand_zone = urban_planner_helpers_v2.Add_zones(board_map,num_industrial,num_commercial,num_residential)
-    rand_zone = board_map
-    fit = urban_planner_helpers_v2.calculate_fitness(rand_zone, generated_map_heuristics)
+    Zoned_board = urban_planner_helpers_v2.Add_zones(board_map,num_industrial,num_commercial,num_residential)
+#    rand_zone = board_map
+#    print(rand_zone)
+    fit = urban_planner_helpers_v2.calculate_fitness(Zoned_board, heuristics)
+    
 
-    Zoned_board = urban_planner_helpers_v2.Add_zones(board_map, num_residential, num_industrial, num_commercial)
-    #    print(Zoned_board)
+   #    print(Zoned_board)
 
     list_of_hill_climbs = urban_planner_helpers_v2.generate_starting_boards(number_boards, Zoned_board)
     start_time = time.time()
@@ -103,16 +106,22 @@ if __name__ == '__main__':
 
     hill_board = list(Zoned_board)
     hill_score = 0
+    hill_counter = 0
+    current_score = hillclimb(hill_board,heuristics)
     
 
-    while (time.time() - start_time) < max_duration and still_computing:
-        current_score = hillclimb(hill_board)
-        if hill_score < current_score:
-            hill_score = current_score
-        hill_board = urban_planner_helpers_v2.generate_starting_boards(1,Zoned_board)
-        print("current best hillclimb score: ",hill_score)
-            
-            
-
+#    while (time.time() - start_time) < max_duration and still_computing:
+#        current_score = hillclimb(hill_board,heuristics)
+#        if hill_score < current_score:
+#            hill_score = current_score
+#        hill_board = urban_planner_helpers_v2.generate_starting_boards(1,Zoned_board)
+#        hill_counter += 1
+#        print(current_score)
+##        print(hill_board)
+##        print("current best hillclimb score: ",hill_score)
+#print("Hill climbing operated ",hill_counter," times")
+#print("Max score for hill climbing: ",hill_score)
+    
+    
 # do genetic engineering
 #        genetics()
