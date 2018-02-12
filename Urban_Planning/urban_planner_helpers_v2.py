@@ -119,7 +119,7 @@ def cross_over(list_of_hill_climbs, elite_maps, normal_maps):
                 #                print('Mutated')
                 flat_normal = mutate(flat_normal)
         flat_elite = np.reshape(flat_elite.tolist(), (len(expanded_elites[i]), len(expanded_elites[i][0])))
-        new_maps.append(flat_elite)
+        new_maps.append(flat_elite.tolist())
 
     return new_maps
 
@@ -257,9 +257,7 @@ def Add_zones(Empty_map, Res_zones, Ind_zones, Com_zones):
 
 
 def shift_zone(input_map,heuristics):
-    r = len(input_map)
-    if r == 1:
-        input_map = input_map[0]
+
     r = len(input_map)
     c = len(input_map[0])
     ip_map = np.array(input_map).flatten()
@@ -278,13 +276,24 @@ def shift_zone(input_map,heuristics):
             shift_map[val_zone[i]] = 0
             for j in range(len(val_without_zones)):
                 shift_map[val_without_zones[j]] = zones[x]
-                #            print(np.reshape(shift_map.tolist(),(len(input_map),len(input_map[0]))))
-                #                print(shift_map)
+
                 ''' put score function here'''
                 score = calculate_fitness(np.reshape(shift_map,(r,c)),heuristics)
                 zipped = np.append(shift_map, score)
-                #            print(zipped)
+
                 scores.append(zipped)
                 shift_map[val_without_zones[j]] = 0
             shift_map[val_zone[i]] = zones[x]
     return scores
+
+def selection(ip_maps,heuristics):
+    total_scores = []
+    for i in ip_maps:
+        score = calculate_fitness(i,heuristics)
+        total_scores.append(score)
+
+    sorted_maps = [x for _,x in sorted(zip(total_scores,ip_maps),reverse=True)]
+    return sorted_maps
+
+        
+        

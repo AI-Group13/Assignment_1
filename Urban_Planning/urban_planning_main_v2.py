@@ -35,36 +35,39 @@ def hillclimb(Zoned_board,heuristics):
             repetition_counter += 1
         hillclimb_board = np.reshape(next_move,(r,c))
 
-    ''' use Zoned_board = urban_planner_helpers_v2.generate_starting_boards(1,Zoned_board) before starting another iteration'''
-#    print(score_counter)
     return score_counter
 
 
-def genetics(list_of_hill_climbs):
+def genetics(gen_maps,heuristics):
     elite_ratio = 0.3
     normal_ratio = 0.3
 
     mutation_ratio = 0.1  # Can't be greater than  (1-elite_ratio)
 
-    # Plceholder score-map
-    score_map = np.random.randint(100, size=100)
 
-    # Placeholder Elite selction
-    elite_maps = list_of_hill_climbs[:int(len(list_of_hill_climbs) * elite_ratio)]
-    normal_maps = list_of_hill_climbs[int(len(list_of_hill_climbs) * elite_ratio):int(
-        (len(list_of_hill_climbs) * (elite_ratio + normal_ratio)))]
+    score_map = urban_planner_helpers_v2.selection(gen_maps,heuristics)
+
+
+    elite_maps = score_map[:int(len(gen_maps) * elite_ratio)]
+    normal_maps = gen_maps[int(len(gen_maps) * elite_ratio):int(
+        (len(gen_maps) * (elite_ratio + normal_ratio)))]
     Maps_to_mutate = normal_maps
     mutation_indices = np.random.choice([i for i in range(len(Maps_to_mutate))],
-                                        int(len(list_of_hill_climbs) * mutation_ratio)).tolist()
+                                        int(len(gen_maps) * mutation_ratio)).tolist()
     for i in mutation_indices:
         Maps_to_mutate[i] = urban_planner_helpers_v2.mutate(Maps_to_mutate[i])
 
-    Crossover_Mutated_maps = urban_planner_helpers_v2.cross_over(list_of_hill_climbs, elite_maps, normal_maps)
+    Crossover_Mutated_maps = urban_planner_helpers_v2.cross_over(gen_maps, elite_maps, normal_maps)
 
+    max_score = 0
     New_mapset = elite_maps + Crossover_Mutated_maps
-    #    print(New_mapset[0])
+    for i in range(len(score_map)):
+#        print(i)
+        score = urban_planner_helpers_v2.calculate_fitness(New_mapset[i],heuristics)
+        if score > max_score:
+            max_score = score
 
-    return
+    return New_mapset, max_score
 
 
 if __name__ == '__main__':
@@ -86,42 +89,39 @@ if __name__ == '__main__':
     heuristics = urban_planner_helpers.generate_start_heuristics(board_map)
        
     Zoned_board = urban_planner_helpers_v2.Add_zones(board_map,num_industrial,num_commercial,num_residential)
-#    rand_zone = board_map
-#    print(rand_zone)
-    fit = urban_planner_helpers_v2.calculate_fitness(Zoned_board, heuristics)
-    
-
-   #    print(Zoned_board)
-
-    list_of_hill_climbs = urban_planner_helpers_v2.generate_starting_boards(number_boards, Zoned_board)
-    start_time = time.time()
-
-    ## placeholder-code for selection
-
-    still_computing = True
-    #    flat_elite = np.array(['X' ,'R' ,'X' ,'I' ,'C' ,'1' ,'2' ,'R' ,'4', 'S', '5', 'I'])
-    #    flat_normal = np.array(['X', '5', 'X', '2' ,'I' ,'1', 'R', '4' ,'I' ,'S' ,'C' ,'R'])
-    #    urban_planner_helpers_v2.proper_selection_approach(flat_elite,flat_normal)
-    genetics(list_of_hill_climbs)
-
     hill_board = list(Zoned_board)
+    gen_maps = urban_planner_helpers_v2.generate_starting_boards(number_boards, Zoned_board)
+    
+    
     hill_score = 0
-    hill_counter = 0
-    current_score = hillclimb(hill_board,heuristics)
+    genetic_score = 0
+    
+    counter = 0    
+    start_time = time.time()
+    still_computing = True
     
 
-#    while (time.time() - start_time) < max_duration and still_computing:
+    while (time.time() - start_time) < max_duration and still_computing:
+        
+        ''' Hill Climbing '''
 #        current_score = hillclimb(hill_board,heuristics)
 #        if hill_score < current_score:
 #            hill_score = current_score
 #        hill_board = urban_planner_helpers_v2.generate_starting_boards(1,Zoned_board)
-#        hill_counter += 1
+#        counter += 1
 #        print(current_score)
-##        print(hill_board)
-##        print("current best hillclimb score: ",hill_score)
-#print("Hill climbing operated ",hill_counter," times")
-#print("Max score for hill climbing: ",hill_score)
+        
+        '''Genetics'''
+        new_maps, current_score = genetics(gen_maps,heuristics)
+        gen_maps = new_maps
+        if current_score > genetic_score:
+            genetic_score = current_score
+        counter += 1         
+        print(current_score)
+        
+
+print("Hill climbing operated ",counter," times")
+print("Max score for hill climbing: ",hill_score)
     
-    
-# do genetic engineering
-#        genetics()
+print("Genetic Algorithm operated ",counter," times")
+print("Max score for Genetic Algorithm: ",genetic_score)
