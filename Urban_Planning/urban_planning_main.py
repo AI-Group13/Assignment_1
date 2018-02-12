@@ -4,6 +4,8 @@ import sys
 
 import genetic_algorithm
 import urban_planner_helpers
+import urban_planner_helpers_v2
+import genetic_algorithm
 
 max_duration = 10  # 10 seconds
 number_organisms = 100
@@ -20,10 +22,14 @@ if __name__ == '__main__':
     pathToFile = sys.argv[1]
 
     (num_industrial, num_commercial, num_residential, board_map) = urban_planner_helpers.read_input_file(pathToFile)
-
+    
     zone_tuple = (num_industrial, num_commercial, num_residential)
-
     generated_map_heuristics = urban_planner_helpers.generate_start_heuristics(board_map)
+       
+    rand_zone = urban_planner_helpers_v2.Add_zones(board_map,1,2,3)
+    
+    fit = urban_planner_helpers_v2.calculate_fitness(rand_zone, generated_map_heuristics)
+    print(fit)
 
     board_size_y = len(board_map)
     board_size_x = len(board_map[0])
