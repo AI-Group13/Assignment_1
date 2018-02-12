@@ -204,10 +204,11 @@ def calculate_fitness(organism_map, maps_cost):
         surrounding_zone = urban_planner_helpers.find_list_of_points_manhattan_away(zone[0], zone[1], 2)
         for spot in surrounding_zone:
 
+            x = spot[0]
+            y = spot[1]
+
             # so long as that spot is within the confines of the board:
             if board_size_x > x >= 0 and board_size_y > y >= 0:
-                x = spot[0]
-                y = spot[1]
                 map_val = organism_map[y][x]
 
                 if map_val == 'C':
@@ -222,10 +223,11 @@ def calculate_fitness(organism_map, maps_cost):
         surrounding_zone = urban_planner_helpers.find_list_of_points_manhattan_away(zone[0], zone[1], 2)
         for spot in surrounding_zone:
 
+            x = spot[0]
+            y = spot[1]
             # so long as that spot is within the confines of the board:
             if board_size_x > x >= 0 and board_size_y > y >= 0:
-                x = spot[0]
-                y = spot[1]
+
                 map_val = organism_map[y][x]
 
                 if map_val == 'I':
