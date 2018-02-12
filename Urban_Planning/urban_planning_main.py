@@ -26,9 +26,13 @@ if __name__ == '__main__':
     zone_tuple = (num_industrial, num_commercial, num_residential)
     generated_map_heuristics = urban_planner_helpers.generate_start_heuristics(board_map)
        
-    rand_zone = urban_planner_helpers_v2.Add_zones(board_map,1,2,3)
-    
+#    rand_zone = urban_planner_helpers_v2.Add_zones(board_map,num_industrial,num_commercial,num_residential)
+    rand_zone = board_map
+    print(rand_zone)
     fit = urban_planner_helpers_v2.calculate_fitness(rand_zone, generated_map_heuristics)
+#    zones = urban_planner_helpers_v2.generate_starting_boards(100,rand_zone)
+#    for i in zones:
+#        print(urban_planner_helpers_v2.calculate_fitness(i,generated_map_heuristics))
     print(fit)
 
     board_size_y = len(board_map)

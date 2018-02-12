@@ -34,6 +34,8 @@ def read_input_file(path_to_input_file):
 
 
 def generate_starting_boards(number_to_make, board_map):
+    board_size_y = len(board_map)
+    board_size_x = len(board_map[0])
     # Geenrates a board with shuffled values EXCEPT toxic and scenic sites
     list_of_starting_boards = []
     flat_board = np.array(board_map).flatten()
@@ -42,7 +44,6 @@ def generate_starting_boards(number_to_make, board_map):
     toxic_loc = np.where(flat_board == 'X')[0]
     scenic_loc = np.where(flat_board == 'S')[0]
     #    print(scenic_loc1)
-
     ##Solution 1
     counter = number_to_make
     # for ii in range(number_to_make):
@@ -60,10 +61,10 @@ def generate_starting_boards(number_to_make, board_map):
         for i in range(len(new_tox_loc)):
             shuffle_board[new_tox_loc[i]], shuffle_board[toxic_loc[i]] = shuffle_board[toxic_loc[i]], shuffle_board[
                 new_tox_loc[i]]
-        reshaped_board = np.reshape(shuffle_board.tolist(), (len(board_map), len(board_map[0])))
+        reshaped_board = np.reshape(shuffle_board.tolist(), (board_size_y, board_size_x))
         list_of_starting_boards.append(reshaped_board.tolist())
         counter -= 1
-
+        
     return list_of_starting_boards
 
 

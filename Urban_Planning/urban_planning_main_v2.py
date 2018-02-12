@@ -3,6 +3,7 @@
 import sys
 import time
 import urban_planner_helpers_v2
+import urban_planner_helpers
 import timeit
 # Test
 from random import shuffle
@@ -19,7 +20,7 @@ def hillclimb(Zoned_board):
 
     score_counter = 0
     repetition_counter = 0
-    hillclimb_board = Zoned_board.copy()
+    hillclimb_board = list(Zoned_board)
 
     while (repetition_counter != termination_parameter):
         possible_maps_scores = urban_planner_helpers_v2.shift_zone(hillclimb_board)
@@ -34,8 +35,6 @@ def hillclimb(Zoned_board):
 
     ''' use Zoned_board = urban_planner_helpers_v2.generate_starting_boards(1,Zoned_board) before starting another iteration'''
 
-    print('done')
-    print(score_counter)
     return score_counter
 
 
@@ -80,6 +79,13 @@ if __name__ == '__main__':
     (num_industrial, num_commercial, num_residential, board_map) = urban_planner_helpers_v2.read_input_file(pathToFile)
     board_size_x = len(board_map)
     board_size_y = len(board_map[0])
+    
+    zone_tuple = (num_industrial, num_commercial, num_residential)
+    generated_map_heuristics = urban_planner_helpers.generate_start_heuristics(board_map)
+       
+#    rand_zone = urban_planner_helpers_v2.Add_zones(board_map,num_industrial,num_commercial,num_residential)
+    rand_zone = board_map
+    fit = urban_planner_helpers_v2.calculate_fitness(rand_zone, generated_map_heuristics)
 
     Zoned_board = urban_planner_helpers_v2.Add_zones(board_map, num_residential, num_industrial, num_commercial)
     #    print(Zoned_board)
@@ -95,11 +101,18 @@ if __name__ == '__main__':
     #    urban_planner_helpers_v2.proper_selection_approach(flat_elite,flat_normal)
     genetics(list_of_hill_climbs)
 
-    hillclimb(Zoned_board)
+    hill_board = list(Zoned_board)
+    hill_score = 0
+    
 
-#    while (time.time() - start_time) < max_duration and still_computing:
-#        for board in list_of_hill_climbs:
-#            hillclimb()
+    while (time.time() - start_time) < max_duration and still_computing:
+        current_score = hillclimb(hill_board)
+        if hill_score < current_score:
+            hill_score = current_score
+        hill_board = urban_planner_helpers_v2.generate_starting_boards(1,Zoned_board)
+        print("current best hillclimb score: ",hill_score)
+            
+            
 
 # do genetic engineering
 #        genetics()
