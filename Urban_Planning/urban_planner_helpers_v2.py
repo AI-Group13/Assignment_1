@@ -1,7 +1,9 @@
 # Module: urban_planner_helpers
-import numpy as np
 import random
 from itertools import permutations
+
+import numpy as np
+
 import urban_planner_helpers
 
 
@@ -138,6 +140,9 @@ def calculate_fitness(organism_map, maps_cost):
     # starting variable to add to to my hearts content
     score = 0
 
+    board_size_y = len(organism_map)
+    board_size_x = len(organism_map[0])
+
     # find the location of all the different zones
     residential_locations = urban_planner_helpers.find_this_landmarks(organism_map, 'R')
     commercial_locations = urban_planner_helpers.find_this_landmarks(organism_map, 'C')
@@ -165,14 +170,17 @@ def calculate_fitness(organism_map, maps_cost):
             x = spot[0]
             y = spot[1]
 
-            # store the value as a temp
-            map_val = organism_map[y][x]
+            # so long as that spot is within the confines of the board:
+            if board_size_x > x >= 0 and board_size_y > y >= 0:
 
-            # depending on what it finds, increment or decrement the score by 5
-            if map_val == 'R':
-                score += 5
-            elif map_val == 'I':
-                score -= 5
+                # store the value as a temp
+                map_val = organism_map[y][x]
+
+                # depending on what it finds, increment or decrement the score by 5
+                if map_val == 'R':
+                    score += 5
+                elif map_val == 'I':
+                    score -= 5
 
     # repeat for commercial and industrial
     for zone in commercial_locations:
@@ -185,19 +193,25 @@ def calculate_fitness(organism_map, maps_cost):
         for spot in surrounding_zone:
             x = spot[0]
             y = spot[1]
-            map_val = organism_map[y][x]
 
-            if map_val == 'R':
-                score += 5
+            # so long as that spot is within the confines of the board:
+            if board_size_x > x >= 0 and board_size_y > y >= 0:
+                map_val = organism_map[y][x]
+
+                if map_val == 'R':
+                    score += 5
 
         surrounding_zone = urban_planner_helpers.find_list_of_points_manhattan_away(zone[0], zone[1], 2)
         for spot in surrounding_zone:
-            x = spot[0]
-            y = spot[1]
-            map_val = organism_map[y][x]
 
-            if map_val == 'C':
-                score -= 5
+            # so long as that spot is within the confines of the board:
+            if board_size_x > x >= 0 and board_size_y > y >= 0:
+                x = spot[0]
+                y = spot[1]
+                map_val = organism_map[y][x]
+
+                if map_val == 'C':
+                    score -= 5
 
     for zone in industrial_locations:
 
@@ -207,12 +221,15 @@ def calculate_fitness(organism_map, maps_cost):
 
         surrounding_zone = urban_planner_helpers.find_list_of_points_manhattan_away(zone[0], zone[1], 2)
         for spot in surrounding_zone:
-            x = spot[0]
-            y = spot[1]
-            map_val = organism_map[y][x]
 
-            if map_val == 'I':
-                score += 3
+            # so long as that spot is within the confines of the board:
+            if board_size_x > x >= 0 and board_size_y > y >= 0:
+                x = spot[0]
+                y = spot[1]
+                map_val = organism_map[y][x]
+
+                if map_val == 'I':
+                    score += 3
 
     # after all that scoring, gimme the value
     return score
