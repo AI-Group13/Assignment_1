@@ -10,6 +10,7 @@ import numpy as np
 
 max_duration = 10  # 10 seconds
 number_boards = 100
+timed = False
 
 global hill_time_counter
 global hill_time_list
@@ -44,7 +45,7 @@ def hillclimb(Zoned_board, heuristics):
             repetition_counter += 1
         hillclimb_board = np.reshape(next_move, (r, c))
 
-        if hill_time_counter <= 12 and (time.time() - start_time) > hill_time_list[hill_time_counter]:
+        if timed and hill_time_counter <= 12 and (time.time() - start_time) > hill_time_list[hill_time_counter]:
             if hill_time_counter <= 12:
                 print('Score at time %0.2f is %i' % (
                     hill_time_list[hill_time_counter], score_counter if score_counter > max_score else max_score))
@@ -142,7 +143,7 @@ if __name__ == '__main__':
                 max_score = current_score
             counter += 1
 
-            if time_counter <= 12 and (time.time() - start_time) > time_list[time_counter]:
+            if timed and time_counter <= 12 and (time.time() - start_time) > time_list[time_counter]:
 
                 if time_counter <= 12:
                     print('Score at time %0.2f is %i' % (time_list[time_counter], max_score))
@@ -171,4 +172,4 @@ if __name__ == '__main__':
         print("Hill climbing operated ", counter, " times")
         print("Max score for hill climbing: ", max_score)
 
-    print(list_of_scores)
+    # print(list_of_scores)
