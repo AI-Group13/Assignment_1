@@ -8,8 +8,8 @@ import timeit
 from random import shuffle
 import numpy as np
 
-max_duration = 5  # 10 seconds
-number_boards = 100
+max_duration = 10  # 10 seconds
+number_boards = 50
 
 
 # filler functions
@@ -19,7 +19,7 @@ def hillclimb(Zoned_board, heuristics):
     c = len(Zoned_board[0])
     termination_parameter = 4
 
-    score_counter = 0
+    score_counter = -9999999999999
     repetition_counter = 0
     hillclimb_board = list(Zoned_board)
 
@@ -56,7 +56,7 @@ def genetics(gen_maps, heuristics):
 
     Crossover_Mutated_maps = urban_planner_helpers.cross_over(gen_maps, elite_maps, normal_maps)
 
-    max_score = 0
+    max_score = -99999999999
     New_mapset = elite_maps + Crossover_Mutated_maps
     for i in range(len(score_map)):
         #        print(i)
@@ -78,7 +78,7 @@ if __name__ == '__main__':
     pathToFile = sys.argv[1]
 
     mode = sys.argv[2]
-    print(mode)
+    print('Mode: %s' % mode)
 
     if mode != 'genetic' and mode != 'hill':
         print("Incorrect mode entered.\nPlease choose either \'genetic\' or \'hill\'")
@@ -94,36 +94,40 @@ if __name__ == '__main__':
     hill_board = list(Zoned_board)
     gen_maps = urban_planner_helpers.generate_starting_boards(number_boards, Zoned_board)
 
-    hill_score = 0
-    genetic_score = 0
+    max_score = -999999999
 
     counter = 0
     start_time = time.time()
     still_computing = True
 
+    time_readings = [0.1, 0.25, 0.5, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    time_counter = 0
+
     while (time.time() - start_time) < max_duration and still_computing:
+
+        if (time.time() - start_time) > time_readings[time_counter]:
+            time_counter += 1
+            print('Score at time %0.2f is %i' % (time_readings[time_counter], max_score))
 
         if mode == 'genetic':
             '''Genetics'''
             new_maps, current_score = genetics(gen_maps, heuristics)
             gen_maps = new_maps
-            if current_score > genetic_score:
-                genetic_score = current_score
+            if current_score > max_score:
+                max_score = current_score
             counter += 1
-            print(current_score)
         elif mode == 'hill':
             ''' Hill Climbing '''
             current_score = hillclimb(hill_board, heuristics)
-            if hill_score < current_score:
-                hill_score = current_score
+            if max_score < current_score:
+                max_score = current_score
             hill_board = urban_planner_helpers.generate_starting_boards(1, Zoned_board)
             counter += 1
-            print(current_score)
 
     if mode == 'genetic':
         print("Genetic Algorithm operated ", counter, " times")
-        print("Max score for Genetic Algorithm: ", genetic_score)
+        print("Max score for Genetic Algorithm: ", max_score)
 
     elif mode == 'hill':
         print("Hill climbing operated ", counter, " times")
-        print("Max score for hill climbing: ", hill_score)
+        print("Max score for hill climbing: ", max_score)
