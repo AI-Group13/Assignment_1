@@ -5,16 +5,16 @@ import time
 import urban_planner_helpers
 import timeit
 # Test
-from random import shuffle
 import numpy as np
 
 max_duration = 10  # 10 seconds
-number_boards = 50
+number_boards = 100
 
 
 # filler functions
 def hillclimb(Zoned_board, heuristics):
     ''' The number of times you repeat the cycle to check if it hit the highest score, before restarts'''
+
     r = len(Zoned_board)
     c = len(Zoned_board[0])
     termination_parameter = 4
@@ -103,6 +103,8 @@ if __name__ == '__main__':
     time_readings = [0.1, 0.25, 0.5, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     time_counter = 0
 
+    list_of_scores = []
+
     while (time.time() - start_time) < max_duration and still_computing:
 
         if (time.time() - start_time) > time_readings[time_counter]:
@@ -124,6 +126,8 @@ if __name__ == '__main__':
             hill_board = urban_planner_helpers.generate_starting_boards(1, Zoned_board)
             counter += 1
 
+        list_of_scores.append(max_score)
+
     if mode == 'genetic':
         print("Genetic Algorithm operated ", counter, " times")
         print("Max score for Genetic Algorithm: ", max_score)
@@ -131,3 +135,5 @@ if __name__ == '__main__':
     elif mode == 'hill':
         print("Hill climbing operated ", counter, " times")
         print("Max score for hill climbing: ", max_score)
+
+    print(list_of_scores)
