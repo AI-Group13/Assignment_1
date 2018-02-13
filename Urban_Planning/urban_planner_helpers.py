@@ -1,5 +1,6 @@
 # Module: urban_planner_helpers
 import random
+import time
 from itertools import permutations
 import copy
 import numpy as np
@@ -32,6 +33,8 @@ def read_input_file(path_to_input_file):
 
 
 def generate_starting_boards(number_to_make, board_map):
+    random.seed(time.time())
+
     board_size_y = len(board_map)
     board_size_x = len(board_map[0])
     # Geenrates a board with shuffled values EXCEPT toxic and scenic sites
@@ -431,6 +434,7 @@ def find_this_landmarks(board, landmark):
                 list_of_points.append((xx, yy))
 
     return list_of_points
+
 
 # Makes an empty board of None with the correct x and y size
 def generate_empty_board(x, y):
