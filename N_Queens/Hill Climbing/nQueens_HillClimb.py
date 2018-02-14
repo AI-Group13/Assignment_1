@@ -82,7 +82,7 @@ def greedy_hillClimb(locations, N, visual):
             loc = list(move_to_scene[0])
             # print ("Updated Scene", move_to_scene)
 
-        numNodes+=  N**2 - N
+        numNodes+=  1
         newscene_status = []
 
 
@@ -95,8 +95,8 @@ def greedy_hillClimb(locations, N, visual):
             _ = initial_scene(N, screen, point_list, square_size, red, move_to_scene[0])
             tdelay += (time.time()-p)
 
-
     branchingFactor = numNodes/moves
+
     print ("\nTotal number of nodes expanded across all restarts %d \n" %(numNodes))
     print ("Effective branching factor %f \n" %(branchingFactor))
     print ("Total cost of movement %d \n" %(totalCost))
