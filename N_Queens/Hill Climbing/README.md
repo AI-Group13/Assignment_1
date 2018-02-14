@@ -1,4 +1,5 @@
-The n-Queens problem solved using two approaches - Greedy Hill Climbing with Restarts AND A* search
+The n-Queens problem solved using two approaches - Greedy Hill Climbing with Restarts AND A* search 
+This folder contains the code for Hill Climbing approach to the solution
 
 1. input.txt - Contains two lines - Line 1: Grid size Line 2: Visualization wanted or not 
 
