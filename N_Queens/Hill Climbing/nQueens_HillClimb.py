@@ -10,20 +10,22 @@ def greedy_hillClimb(locations, N, visual):
     # Giving out an error with no solution availability for N<=3
 
     if N<=3:
-        print ("No solution")
+        print ("No solution possible for this value of N \n")
         # print (locations)
         return 0
 
     # Printing out the randomly generated start state for the problem
     start_state = [(locations[index]%N, index) for index in range(0,len(locations))]
     # print ("Start State", locations)
-    print ("Start State", start_state)
+    print ("Start State ", start_state)
 
     loc, attacks = heuristic(locations, N)
     current_minheuristic = 0
 
     # print ("Inital random scene", loc)
-    moves, restarts, totalCost, numNodes = 0, 0, 0, 0
+    moves, restarts, totalCost, numNodes, tdelay = 0, 0, 0, 0, 0
+    pathToSol = []
+    pathToSol.append(start_state)
 
     while (True):
 
@@ -52,16 +54,19 @@ def greedy_hillClimb(locations, N, visual):
         # Moving to a new scene
         move_to_scene = newscene_status[0]
 
+        # print (move_to_scene[0])
         # Cost  of current move being added to the total path cost
         totalCost += move_to_scene[2]
-
+        moves+=1
+        pathToSol.append(move_to_scene[0])
         current_minheuristic = move_to_scene[1]
 
         # Terminating the process when the queens are finally placed in a manner that they face no attacks and the heuristic is 0
         if current_minheuristic==0:
-            print ("Task achieved")
+            print ("\nTask achieved !! \n")
             print ("Final scene with queen placement", move_to_scene[0])
-            print ("Final Heuristic value", move_to_scene[1])
+            print ("\nRows and Column numbering starts with 0 and 0")
+            print ("\nFinal Heuristic value ", move_to_scene[1])
             break
 
         # Making a random restart in case of a local maxima
@@ -72,39 +77,41 @@ def greedy_hillClimb(locations, N, visual):
             restarts+=1
             totalCost=0
             moves = 0
+            pathToSol = []
         else:
             loc = list(move_to_scene[0])
             # print ("Updated Scene", move_to_scene)
 
         numNodes+=  N**2 - N
-        moves+=1
-
-        # Visualize each individual move
-        # NOTE - The time delay would be reflected in the total run time
-
-        # if visual==1:
-        #     screen, white, red, black, pink, N, point_list, square_size = create_scene(N)
-        #     _ = initial_scene(N, screen, point_list, square_size, red, move_to_scene[0])
-        #     time.sleep(0.1)
-
         newscene_status = []
 
+
+        # Visualize each individual move  or transition
+        # NOTE - The time delay would be reflected in the total run time
+
+        if visual==1:
+            p = time.time()
+            screen, white, red, black, pink, N, point_list, square_size = create_scene(N)
+            _ = initial_scene(N, screen, point_list, square_size, red, move_to_scene[0])
+            tdelay += (time.time()-p)
+
+
     branchingFactor = numNodes/moves
-    print ("Total number of nodes expanded across all restarts", numNodes)
-    print ("Effective branching factor", branchingFactor)
-    print ("Total cost of movement", totalCost)
-    print ("Total number of restarts", restarts)
-    print ("Total number of moves taken", moves)
+    print ("\nTotal number of nodes expanded across all restarts %d \n" %(numNodes))
+    print ("Effective branching factor %f \n" %(branchingFactor))
+    print ("Total cost of movement %d \n" %(totalCost))
+    print ("Total number of restarts %d \n" %(restarts))
+    print ("Total number of moves taken %d \n " %(moves))
+    print ("Path to solution after the final restart", pathToSol)
+
 
 
     # Visualize the final status of the queens placed at the positions that give an effective heuristic  of 0
-
     # NOTE -  The time delay will be reflected in the total time taken for the process
 
     if visual==1:
         screen, white, red, black, pink, N, point_list, square_size = create_scene(N)
         _ = initial_scene(N, screen, point_list, square_size, red, move_to_scene[0])                                         # screen, N, point_list, square_size, red)
 
-
-
+    return tdelay
 

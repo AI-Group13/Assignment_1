@@ -21,8 +21,8 @@ def read_input_file(path_to_input_file):
     if int(lines[1])!=1 and int(lines[1])!=0:
         sys.exit("Incorrect visualization condition fed as input ")
     else:
-        visual = lines[1]
-        print ("Visualization:", visual )
+        visual = int(lines[1])
+        print ("Visualization: %d \n " %( visual ))
 
     return grid_size, int(visual)
 
@@ -34,17 +34,17 @@ def main():
     grid_size, visual = read_input_file('input.txt')
     InitQueenLoc = initial_scene(grid_size)  # screen, N, point_list, square_size, red)
 
-    print ("Solving Hill Climbing for grid-size ", grid_size )
+    print ("Solving Hill Climbing for grid-size: %d \n " %(grid_size))
 
-    greedy_hillClimb(InitQueenLoc,grid_size, visual)
+    tdelay = greedy_hillClimb(InitQueenLoc,grid_size, visual)
 
-    print ("Hill Climbing Complete")
+    print ("\nHill Climbing Complete \n")
 
     # Measure the total time taken for the program to run
 
-    time_taken = (time.time() - t_start)
-    print ("Time taken", time_taken )
-    # time.sleep(10)
+    time_taken = (time.time() - t_start - tdelay)
+    print ("Time taken for the process (Irrespective of the visualization condition): %f seconds \n" %( time_taken ))
+    time.sleep(10)
 
 if __name__ == '__main__':
     main()

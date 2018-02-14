@@ -55,9 +55,8 @@ def initial_scene( N, screen=0, point_list=0, square_size=0, red=0, loc_visualiz
     if loc_visualize!=0:
         locs = [element[0] + element[1]*N for element in loc_visualize]
         for loc in locs:
-            pygame.draw.circle(screen, red, (point_list[loc][0]+square_size/2, point_list[loc][1] +square_size/2), int(square_size*0.3)) #Visualizing the initial config
+            pygame.draw.circle(screen, red, (int(point_list[loc][0]+square_size/2), int(point_list[loc][1] +square_size/2)), int(square_size*0.3)) #Visualizing the initial config
         pygame.display.update()
-        time.sleep(0.1)
 
     return InitQueenLoc
 
@@ -128,7 +127,8 @@ def try_placement(currentScene, N):
             sc, heuristicvalue = heuristic(heuristicScene,N)  # Heuristic value for the new configuration obtained after shifting the queen to the new location
             if trialPos[0] - pos[0] !=0:
                 cost = 10 + (trialPos[0] - pos[0]) ** 2
-            #
+            else:
+                cost = 0
             # print ("Cost of movement", cost)
             # print ("Heuristic Scene in grid format", new)
             # print ("Heuristic Scene", heuristicScene)
