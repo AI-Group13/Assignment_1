@@ -26,14 +26,13 @@ c. Required python libraries and packages - Codes shall work on Python3
 a. Refer to the A-Star folder - This folder contains the code for "A* search" approach to the solution
 
 b. Description of the individual files 
-	input.txt		 - Contains two lines to be fed as input 
-					Line 1: Grid size (Integer)
-					Line 2: Visualization condition for the result - 1 for YES and 0 for NO - (Integer)
-
+	
 	nQueens.py 		- Contains the various helper functions for pygame based visualization, heuristic calculation 					and move checking
 	nQueens_main.py		- Runs required algorithm based on the input file entries
-	astar.py 		- Greedy Hill Climb with random restarts Algorithm implementation
+	astar.py 		- Implementation of the A* Search Algorithm
 
 c. Required python libraries and packages - Codes shall work on Python3
 		
 	pygame -  (Install via Synaptic Package manager), time, random, math, sys, 
+	
+d. When you run the code it will ask you to input the size of the game.
